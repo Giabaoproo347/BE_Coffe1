@@ -1,4 +1,4 @@
-package com.codegym.services.impl.user;
+package com.codegym.services.user;
 
 import com.codegym.models.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

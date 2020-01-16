@@ -2,7 +2,7 @@ package com.codegym.security;
 
 import com.codegym.security.jwt.AuthEntryPointJwt;
 import com.codegym.security.jwt.AuthTokenFilter;
-import com.codegym.services.impl.user.UserDetailsServiceImpl;
+import com.codegym.services.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

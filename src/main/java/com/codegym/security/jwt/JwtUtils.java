@@ -1,6 +1,6 @@
 package com.codegym.security.jwt;
 
-import com.codegym.services.impl.user.UserDetailsImpl;
+import com.codegym.services.user.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

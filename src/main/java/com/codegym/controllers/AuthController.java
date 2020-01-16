@@ -10,7 +10,7 @@ import com.codegym.payload.response.MessageResponse;
 import com.codegym.repositories.user.RoleRepository;
 import com.codegym.repositories.user.UserRepository;
 import com.codegym.security.jwt.JwtUtils;
-import com.codegym.services.impl.user.UserDetailsImpl;
+import com.codegym.services.user.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

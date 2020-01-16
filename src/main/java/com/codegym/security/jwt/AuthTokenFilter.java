@@ -1,6 +1,6 @@
 package com.codegym.security.jwt;
 
-import com.codegym.services.impl.user.UserDetailsServiceImpl;
+import com.codegym.services.user.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
