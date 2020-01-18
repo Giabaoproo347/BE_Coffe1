@@ -5,6 +5,7 @@ import com.codegym.models.Category;
 import com.codegym.models.Payment;
 import com.codegym.models.Promotion;
 import com.codegym.repositories.ProductRepository;
+import com.codegym.services.CategoryService;
 import com.codegym.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -24,6 +25,10 @@ public class ProductController {
     ProductRepository productRepository;
     @Autowired
     ProductService productService;
+
+    @Autowired
+    CategoryService categoryService;
+
     @Autowired
     Environment env;
 
