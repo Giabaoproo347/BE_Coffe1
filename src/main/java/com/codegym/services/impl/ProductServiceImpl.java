@@ -6,6 +6,7 @@ import com.codegym.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -30,5 +31,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void remove(Long id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Product> findByNameContaining(String name) {
+        return productRepository.findByNameContaining(name);
+    }
+
+    @Override
+    public List<Product> findByCategoryId(Long id) {
+        return productRepository.findByCategoryId(id);
+    }
+
+    @Override
+    public List<Product> findByPromotionId(Long id) {
+        return productRepository.findByPromotionId(id);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,28 @@ public class ProductController {
         }
         return new ResponseEntity<Optional<Product>>(product, HttpStatus.OK);
     }
+
+
+
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<List<Product>> listAllProductByCategories(@PathVariable Long id) {
+        List<Product> products = productService.findByCategoryId(id);
+        if (products.isEmpty()) {
+            return new ResponseEntity<List<Product>>(products, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/promotion/{id}")
+    public ResponseEntity<List<Product>> listAllProductByPromotion(@PathVariable Long id) {
+        List<Product> products = productService.findByPromotionId(id);
+        if (products.isEmpty()) {
+            return new ResponseEntity<List<Product>>(products, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+
 
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
