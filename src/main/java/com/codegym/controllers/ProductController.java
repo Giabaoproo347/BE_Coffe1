@@ -2,7 +2,6 @@ package com.codegym.controllers;
 
 import com.codegym.models.Product;
 import com.codegym.models.Category;
-import com.codegym.models.Payment;
 import com.codegym.models.Promotion;
 import com.codegym.repositories.ProductRepository;
 import com.codegym.services.CategoryService;
@@ -34,7 +33,7 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<List<Product>> listAllProduct() {
-        List<Product> products = (List<Product>) productService.findAllBook();
+        List<Product> products = (List<Product>) productService.findAll();
         if (products.isEmpty()) {
             return new ResponseEntity<List<Product>>(products, HttpStatus.NO_CONTENT);
         }

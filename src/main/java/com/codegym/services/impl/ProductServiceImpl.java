@@ -13,7 +13,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public Iterable<Product> findAllBook() {
+    public Iterable<Product> findAll() {
         return productRepository.findAll();
     }
 
