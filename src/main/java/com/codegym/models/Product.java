@@ -11,6 +11,9 @@ public class Product {
     private long price;
     private String description;
     private String image;
+    private String image2;
+    private String image3;
+
 
     @ManyToOne
     private Promotion promotion;
@@ -20,13 +23,15 @@ public class Product {
 
     public Product() {
     }
-    public Product( String name, long price, String description, String image, Promotion promotion, Category category) {
+    public Product( String name, long price, String description, String image,String image2, String image3 , Promotion promotion, Category category) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.image = image;
         this.promotion = promotion;
         this.category = category;
+        this.image2 = image2;
+        this.image3 = image3;
     }
 
     public Long getId() {
@@ -84,4 +89,21 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public String getImage2() {
+        return image2;
+    }
+
+    public void setImage2(String image2) {
+        this.image2 = image2;
+    }
+
+    public String getImage3() {
+        return image3;
+    }
+
+    public void setImage3(String image3) {
+        this.image3 = image3;
+    }
+
 }

@@ -57,7 +57,7 @@ public class ProductController {
         System.out.println("Creating Product " + product.getName());
         Category category = product.getCategory();
         Promotion promotion = product.getPromotion();
-        Product currentProduct = new Product(product.getName(), product.getPrice(), product.getDescription(), product.getImage(), promotion, category);
+        Product currentProduct = new Product(product.getName(), product.getPrice(), product.getDescription(), product.getImage(), product.getImage2(), product.getImage3(), promotion, category);
         productService.save(currentProduct);
         return new ResponseEntity<Optional<Product>>(HttpStatus.CREATED);
     }
@@ -77,6 +77,8 @@ public class ProductController {
         currentProduct.get().setPrice(product.getPrice());
         currentProduct.get().setDescription(product.getDescription());
         currentProduct.get().setImage(product.getImage());
+        currentProduct.get().setImage2(product.getImage2());
+        currentProduct.get().setImage3(product.getImage3());
         currentProduct.get().setPromotion(product.getPromotion());
         currentProduct.get().setCategory(product.getCategory());
         productService.save(currentProduct.get());
