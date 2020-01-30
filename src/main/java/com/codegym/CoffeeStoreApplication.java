@@ -6,15 +6,15 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class BookStoreApplication extends SpringBootServletInitializer {
+public class CoffeeStoreApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(BookStoreApplication.class);
+		return application.sources(CoffeeStoreApplication.class);
 	}
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(BookStoreApplication.class, args);
+		SpringApplication.run(CoffeeStoreApplication.class, args);
 	}
 
 }

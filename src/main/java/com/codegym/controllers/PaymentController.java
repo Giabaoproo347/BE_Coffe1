@@ -53,7 +53,13 @@ public class PaymentController {
         if (currentPayment.isPresent()) {
             currentPayment.get().setId(id);
             currentPayment.get().setName(payment.getName());
+            currentPayment.get().setAddress(payment.getAddress());
+            currentPayment.get().setPhone(payment.getPhone());
+            currentPayment.get().setEmail(payment.getEmail());
+            currentPayment.get().setTotal(payment.getTotal());
             currentPayment.get().setDate(payment.getDate());
+            currentPayment.get().setDescription(payment.getDescription());
+            currentPayment.get().setStatus(payment.getStatus());
             currentPayment.get().setOrders(payment.getOrders());
 
             paymentService.save(payment);
