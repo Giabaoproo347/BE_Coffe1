@@ -27,7 +27,7 @@ public class PaymentController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewPayment(@Valid @RequestBody Payment payment) {
         try {
             paymentService.save(payment);
