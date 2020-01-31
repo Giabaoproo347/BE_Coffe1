@@ -14,6 +14,7 @@ public class Payment {
     private String email;
     private Double total;
     private String date;
+    private String method;
     private String description;
     private String status;
 
@@ -24,7 +25,11 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(Long id, String name, String address, String phone, String email, Double total, String date, String description, String status, Set<Order> orders) {
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public Payment(Long id, String name, String address, String phone, String email, Double total, String date, String description, String status, String method, Set<Order> orders) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -35,6 +40,7 @@ public class Payment {
         this.date = date;
         this.description = description;
         this.status = status;
+        this.method = method;
         this.orders = orders;
     }
 
@@ -116,5 +122,9 @@ public class Payment {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getMethod() {
+        return method;
     }
 }

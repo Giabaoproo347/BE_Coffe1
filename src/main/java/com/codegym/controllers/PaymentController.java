@@ -60,6 +60,7 @@ public class PaymentController {
             currentPayment.get().setDate(payment.getDate());
             currentPayment.get().setDescription(payment.getDescription());
             currentPayment.get().setStatus(payment.getStatus());
+            currentPayment.get().setMethod(payment.getMethod());
             currentPayment.get().setOrders(payment.getOrders());
 
             paymentService.save(payment);
