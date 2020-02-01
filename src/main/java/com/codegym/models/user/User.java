@@ -51,6 +51,14 @@ public class User {
 	public User() {
 	}
 
+//	public User(String username, String email, String password, String address, String phone) {
+//		this.username = username;
+//		this.email = email;
+//		this.password = password;
+//		this.address = address;
+//		this.phone = phone;
+//	}
+
 	public User(String username, String email, String password, String address, String phone) {
 		this.username = username;
 		this.email = email;
@@ -59,16 +67,7 @@ public class User {
 		this.phone = phone;
 	}
 
-	public User(String username, String email, String password, String address, String phone, String method, String name, Double total) {
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.address = address;
-		this.phone = phone;
-		this.name = name;
-		this.total = total;
-		this.method = method;
-	}
+
 
 	public String getAddress() {
 		return address;
