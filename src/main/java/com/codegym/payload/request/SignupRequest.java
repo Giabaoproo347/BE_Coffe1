@@ -22,6 +22,12 @@ public class SignupRequest {
     @NotBlank
     @Size(max = 20)
     private String phone;
+
+    private String name;
+
+    private Double total;
+
+    private String method;
     
     private Set<String> role;
     
@@ -75,5 +81,29 @@ public class SignupRequest {
     
     public void setRole(Set<String> role) {
       this.role = role;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 }
