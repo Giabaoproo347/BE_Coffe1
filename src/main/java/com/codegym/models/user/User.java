@@ -31,6 +31,12 @@ public class User {
 	@Size(max = 120)
 	private String password;
 
+	private String name;
+
+	private Double total;
+
+	private String method;
+
 	private String address;
 
 	@NotBlank
@@ -51,6 +57,17 @@ public class User {
 		this.password = password;
 		this.address = address;
 		this.phone = phone;
+	}
+
+	public User(String username, String email, String password, String address, String phone, String method, String name, Double total) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.phone = phone;
+		this.name = name;
+		this.total = total;
+		this.method = method;
 	}
 
 	public String getAddress() {
@@ -107,5 +124,29 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 }
