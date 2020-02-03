@@ -123,4 +123,7 @@ public class AuthController {
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
+
+/*	@PutMapping("update-profile/{id}")
+	public ResponseEntity<?> updateUser(@Valid @RequestBody UserForm userForm)*/
 }

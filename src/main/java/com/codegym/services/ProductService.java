@@ -9,4 +9,7 @@ public interface ProductService {
     Optional<Product> findById(Long id);
     void save(Product product);
     void remove(Long id);
+
+    Iterable<Product> findByName(String name);
+    Iterable<Product> findProductsByNameContaining(String name);
 }

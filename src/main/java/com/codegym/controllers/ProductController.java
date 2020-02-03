@@ -4,6 +4,7 @@ import com.codegym.models.Product;
 import com.codegym.models.Category;
 import com.codegym.models.Payment;
 import com.codegym.models.Promotion;
+import com.codegym.models.search.SearchProductByName;
 import com.codegym.repositories.ProductRepository;
 import com.codegym.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +93,22 @@ public class ProductController {
 
         productService.remove(id);
         return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/search-product-by-name")
+    public ResponseEntity<?> findProductByName(@RequestBody SearchProductByName searchProductByName) {
+        if(searchProductByName.getNameProduct() == "" || searchProductByName.getNameProduct() == null) {
+            List<Product> products = (List<Product>) productService.findAllBook();
+            if(products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products,HttpStatus.OK);
+        } else {
+            List<Product> products = (List<Product>) productService.findProductsByNameContaining(searchProductByName.getNameProduct());
+            if(products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products,HttpStatus.OK);
+        }
     }
 }

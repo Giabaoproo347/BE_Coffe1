@@ -31,4 +31,15 @@ public class ProductServiceImpl implements ProductService {
     public void remove(Long id) {
         productRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Product> findByName(String name) {
+        return productRepository.findByName(name);
+    }
+
+    @Override
+    public Iterable<Product> findProductsByNameContaining(String name) {
+        return productRepository.findProductsByNameContaining(name);
+    }
+
 }
