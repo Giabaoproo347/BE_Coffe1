@@ -18,6 +18,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public Iterable<Payment> findAllByStatus(String status) {
+        return paymentRepository.findAllByStatus(status);
+    }
+
+    @Override
     public Optional<Payment> findById(Long id) {
         return paymentRepository.findById(id);
     }
