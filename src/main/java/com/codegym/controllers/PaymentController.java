@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +25,15 @@ public class PaymentController {
     public ResponseEntity<Iterable<Payment>> showListPayment() {
         Iterable<Payment> payments = paymentService.findAll();
         return new ResponseEntity<Iterable<Payment>>(payments, HttpStatus.OK);
+    }
+
+    @GetMapping("list-by-status")
+    public ResponseEntity<List<Payment>> listPaymentByStatus(String status) {
+        List<Payment> paymentList = (List<Payment>) paymentService.findAllByStatus(status);
+        if (paymentList.isEmpty()) {
+            return new ResponseEntity<List<Payment>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Payment>>(paymentList, HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -52,6 +62,7 @@ public class PaymentController {
         Optional<Payment> currentPayment = paymentService.findById(id);
         if (currentPayment.isPresent()) {
             currentPayment.get().setId(id);
+            currentPayment.get().setCode(payment.getCode());
             currentPayment.get().setName(payment.getName());
             currentPayment.get().setAddress(payment.getAddress());
             currentPayment.get().setPhone(payment.getPhone());
