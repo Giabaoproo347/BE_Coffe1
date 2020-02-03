@@ -2,10 +2,10 @@ package com.codegym.controllers;
 
 import com.codegym.models.Product;
 import com.codegym.models.Category;
-import com.codegym.models.Payment;
 import com.codegym.models.Promotion;
 import com.codegym.models.search.SearchProductByName;
 import com.codegym.repositories.ProductRepository;
+import com.codegym.services.CategoryService;
 import com.codegym.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,10 @@ public class ProductController {
     ProductRepository productRepository;
     @Autowired
     ProductService productService;
+
+    @Autowired
+    CategoryService categoryService;
+
     @Autowired
     Environment env;
 
@@ -48,13 +53,35 @@ public class ProductController {
         return new ResponseEntity<Optional<Product>>(product, HttpStatus.OK);
     }
 
+
+
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<List<Product>> listAllProductByCategories(@PathVariable Long id) {
+        List<Product> products = productService.findByCategoryId(id);
+        if (products.isEmpty()) {
+            return new ResponseEntity<List<Product>>(products, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/promotion/{id}")
+    public ResponseEntity<List<Product>> listAllProductByPromotion(@PathVariable Long id) {
+        List<Product> products = productService.findByPromotionId(id);
+        if (products.isEmpty()) {
+            return new ResponseEntity<List<Product>>(products, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+
+
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Optional<Product>> createProduct(@RequestBody Product product) {
         System.out.println("Creating Product " + product.getName());
         Category category = product.getCategory();
         Promotion promotion = product.getPromotion();
-        Product currentProduct = new Product(product.getName(), product.getPrice(), product.getDescription(), product.getImage(), promotion, category);
+        Product currentProduct = new Product(product.getName(), product.getPrice(), product.getDescription(), product.getImage(), product.getImage2(), product.getImage3(), promotion, category);
         productService.save(currentProduct);
         return new ResponseEntity<Optional<Product>>(HttpStatus.CREATED);
     }
@@ -74,6 +101,8 @@ public class ProductController {
         currentProduct.get().setPrice(product.getPrice());
         currentProduct.get().setDescription(product.getDescription());
         currentProduct.get().setImage(product.getImage());
+        currentProduct.get().setImage2(product.getImage2());
+        currentProduct.get().setImage3(product.getImage3());
         currentProduct.get().setPromotion(product.getPromotion());
         currentProduct.get().setCategory(product.getCategory());
         productService.save(currentProduct.get());

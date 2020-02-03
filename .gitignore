@@ -21,7 +21,6 @@ build/
 *.ipr
 out/
 src/main/resources/**
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

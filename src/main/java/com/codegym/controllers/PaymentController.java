@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,8 +27,17 @@ public class PaymentController {
         return new ResponseEntity<Iterable<Payment>>(payments, HttpStatus.OK);
     }
 
+    @GetMapping("list-by-status")
+    public ResponseEntity<List<Payment>> listPaymentByStatus(String status) {
+        List<Payment> paymentList = (List<Payment>) paymentService.findAllByStatus(status);
+        if (paymentList.isEmpty()) {
+            return new ResponseEntity<List<Payment>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Payment>>(paymentList, HttpStatus.OK);
+    }
+
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity addNewPayment(@Valid @RequestBody Payment payment) {
         try {
             paymentService.save(payment);
@@ -52,8 +62,16 @@ public class PaymentController {
         Optional<Payment> currentPayment = paymentService.findById(id);
         if (currentPayment.isPresent()) {
             currentPayment.get().setId(id);
+            currentPayment.get().setCode(payment.getCode());
             currentPayment.get().setName(payment.getName());
+            currentPayment.get().setAddress(payment.getAddress());
+            currentPayment.get().setPhone(payment.getPhone());
+            currentPayment.get().setEmail(payment.getEmail());
+            currentPayment.get().setTotal(payment.getTotal());
             currentPayment.get().setDate(payment.getDate());
+            currentPayment.get().setDescription(payment.getDescription());
+            currentPayment.get().setStatus(payment.getStatus());
+            currentPayment.get().setMethod(payment.getMethod());
             currentPayment.get().setOrders(payment.getOrders());
 
             paymentService.save(payment);

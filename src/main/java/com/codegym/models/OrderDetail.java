@@ -7,9 +7,10 @@ public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    private String name;
     private long salePrice;
     private long quantity;
+    private String description;
 
     @ManyToOne
     private Order order;
@@ -17,15 +18,25 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
-    public OrderDetail(Long id, long salePrice, long quantity, Order order) {
-        this.id  = id   ;
+    public OrderDetail(Long id, String name, long salePrice, long quantity, String description, Order order) {
+        this.id = id;
+        this.name = name;
         this.salePrice = salePrice;
         this.quantity = quantity;
+        this.description = description;
         this.order = order;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(Long id) {

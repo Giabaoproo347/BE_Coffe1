@@ -1,5 +1,7 @@
 package com.codegym.controllers;
 
+import com.codegym.models.Category;
+import com.codegym.models.Order;
 import com.codegym.models.user.ERole;
 import com.codegym.models.user.Role;
 import com.codegym.models.user.User;
@@ -12,17 +14,22 @@ import com.codegym.repositories.user.UserRepository;
 import com.codegym.security.jwt.JwtUtils;
 import com.codegym.services.user.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,7 +70,9 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt,
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
+												 userDetails.getEmail(),
+												 userDetails.getPhone(),
+												 userDetails.getAddress(),
 												 roles));
 	}
 
@@ -124,6 +133,64 @@ public class AuthController {
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 
-/*	@PutMapping("update-profile/{id}")
-	public ResponseEntity<?> updateUser(@Valid @RequestBody UserForm userForm)*/
+	@GetMapping("")
+	public ResponseEntity<List<User>> listAllUser() {
+		List<User> users = (List<User>) userRepository.findAll();
+		if (users.isEmpty()) {
+			return new ResponseEntity<List<User>>(users, HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Optional<User>> getUser(@PathVariable("id") long id){
+		Optional<User> user = userRepository.findById(id);
+		if(!user.isPresent()){
+			return new ResponseEntity<Optional<User>>(user, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
+	}
+
+	@PostMapping("")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder uriComponentsBuilder) {
+		userRepository.save(user);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriComponentsBuilder.path("/{id}").buildAndExpand(user.getId()).toUri());
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Optional<User>> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+
+		Optional<User> currentUser = userRepository.findById(id);
+
+		if (!currentUser.isPresent()) {
+			return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+		}
+
+		currentUser.get().setAddress(user.getAddress());
+		currentUser.get().setEmail(user.getEmail());
+		currentUser.get().setId(user.getId());
+		currentUser.get().setMethod(user.getMethod());
+		currentUser.get().setName(user.getName());
+		currentUser.get().setPassword(user.getPassword());
+		currentUser.get().setPhone(user.getPhone());
+		currentUser.get().setTotal(user.getTotal());
+		currentUser.get().setRoles(user.getRoles());
+		currentUser.get().setUsername(user.getUsername());
+		return new ResponseEntity<Optional<User>>(currentUser, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
+		Optional<User> user = userRepository.findById(id);
+		if (!user.isPresent()) {
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		}
+		userRepository.deleteById(id);
+		return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+	}
 }
