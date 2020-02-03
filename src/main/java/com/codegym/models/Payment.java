@@ -8,6 +8,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long code;
     private String name;
     private String address;
     private String phone;
@@ -29,8 +30,9 @@ public class Payment {
         this.method = method;
     }
 
-    public Payment(Long id, String name, String address, String phone, String email, Double total, String date, String description, String status, String method, Set<Order> orders) {
+    public Payment(Long id, String name, String address, String phone, String email, Double total, String date, String description, String status, String method, Long code, Set<Order> orders) {
         this.id = id;
+        this.code = code;
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -126,5 +128,13 @@ public class Payment {
 
     public String getMethod() {
         return method;
+    }
+
+    public Long getCode() {
+        return code;
+    }
+
+    public void setCode(Long code) {
+        this.code = code;
     }
 }

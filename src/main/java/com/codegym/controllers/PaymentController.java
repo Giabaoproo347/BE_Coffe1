@@ -52,6 +52,7 @@ public class PaymentController {
         Optional<Payment> currentPayment = paymentService.findById(id);
         if (currentPayment.isPresent()) {
             currentPayment.get().setId(id);
+            currentPayment.get().setCode(payment.getCode());
             currentPayment.get().setName(payment.getName());
             currentPayment.get().setAddress(payment.getAddress());
             currentPayment.get().setPhone(payment.getPhone());
