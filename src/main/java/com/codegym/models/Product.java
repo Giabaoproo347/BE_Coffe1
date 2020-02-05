@@ -1,6 +1,7 @@
 package com.codegym.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -20,6 +21,9 @@ public class Product {
 
     @ManyToOne
     private Category category;
+
+    @OneToMany(targetEntity = Commenter.class)
+    private List<Commenter> commenters;
 
     public Product() {
     }
@@ -106,4 +110,11 @@ public class Product {
         this.image3 = image3;
     }
 
+    public List<Commenter> getCommenters() {
+        return commenters;
+    }
+
+    public void setCommenters(List<Commenter> commenters) {
+        this.commenters = commenters;
+    }
 }
