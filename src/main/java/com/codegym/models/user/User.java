@@ -1,10 +1,13 @@
 package com.codegym.models.user;
 
+import com.codegym.models.Commenter;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,6 +45,9 @@ public class User {
 	@NotBlank
 	private String phone;
 
+	@OneToMany(targetEntity = Commenter.class)
+	private List<Commenter> commenters;
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
 				joinColumns = @JoinColumn(name = "user_id"), 
@@ -67,7 +73,13 @@ public class User {
 		this.phone = phone;
 	}
 
+	public List<Commenter> getCommenters() {
+		return commenters;
+	}
 
+	public void setCommenters(List<Commenter> commenters) {
+		this.commenters = commenters;
+	}
 
 	public String getAddress() {
 		return address;
