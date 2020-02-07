@@ -3,6 +3,7 @@ package com.codegym.controllers;
 
 import com.codegym.models.Order;
 import com.codegym.models.Payment;
+import com.codegym.models.Status;
 import com.codegym.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,16 @@ public class PaymentController {
     public ResponseEntity<Iterable<Payment>> showListPayment() {
         Iterable<Payment> payments = paymentService.findAll();
         return new ResponseEntity<Iterable<Payment>>(payments, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> findAllByUser_Id(@PathVariable Long id) {
+        List<Payment> paymentList = paymentService.findAllByUserId(id);
+        if (paymentList != null) {
+            return new ResponseEntity<List<Payment>>(paymentList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("list-by-status")
@@ -57,7 +68,7 @@ public class PaymentController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
         Optional<Payment> currentPayment = paymentService.findById(id);
         if (currentPayment.isPresent()) {
@@ -81,8 +92,40 @@ public class PaymentController {
 
     }
 
+//    @PutMapping("/change-status/{id}")
+//    public ResponseEntity<?> changeOrderStatus(@RequestBody String status, @PathVariable Long id) {
+//        String currentStatus;
+//        switch (status) {
+//            case "order":
+//                currentStatus = Status.order;
+//                break;
+//            case "processing":
+//                currentStatus = Status.processing;
+//                break;
+//            case "cancel":
+//                currentStatus = Status.cancel;
+//                break;
+//            case "done":
+//                currentStatus = Status.done;
+//                break;
+//            case "normal":
+//                currentStatus = Status.normal;
+//                break;
+//            default:
+//                throw new IllegalStateException("Unexpected value: " + status);
+//        }
+//        Optional<Payment> currentPayment = paymentService.findById(id);
+//        if (currentPayment.isPresent()) {
+//            currentPayment.get().setStatus(currentStatus);
+//            paymentService.save(currentPayment.get());
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Payment> deletePayment(@PathVariable Long id) {
         Optional<Payment> payment = paymentService.findById(id);
         if (payment.isPresent()) {

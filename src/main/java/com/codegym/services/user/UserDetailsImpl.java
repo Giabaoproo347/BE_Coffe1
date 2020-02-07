@@ -20,9 +20,9 @@ public class UserDetailsImpl implements UserDetails {
 
 	private String email;
 
-	private String phone;
-
 	private String address;
+
+	private String phone;
 
 	@JsonIgnore
 	private String password;
@@ -30,7 +30,7 @@ public class UserDetailsImpl implements UserDetails {
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(Long id, String username, String email, String password, String address, String phone,
-			Collection<? extends GrantedAuthority> authorities) {
+						   Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -46,10 +46,10 @@ public class UserDetailsImpl implements UserDetails {
 				.collect(Collectors.toList());
 
 		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
+				user.getId(),
+				user.getUsername(),
 				user.getEmail(),
-				user.getPassword(), 
+				user.getPassword(),
 				user.getAddress(),
 				user.getPhone(),
 				authorities);
@@ -108,19 +108,19 @@ public class UserDetailsImpl implements UserDetails {
 		return Objects.equals(id, user.id);
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
 	public String getAddress() {
 		return address;
 	}
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }

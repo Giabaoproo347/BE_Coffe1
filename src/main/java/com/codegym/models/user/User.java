@@ -1,6 +1,8 @@
 package com.codegym.models.user;
 
 import com.codegym.models.Commenter;
+import com.codegym.models.Payment;
+import com.codegym.models.Product;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -47,6 +49,10 @@ public class User {
 
 	@OneToMany(targetEntity = Commenter.class)
 	private List<Commenter> commenters;
+
+	@OneToMany
+	private Set<Payment> payments;
+
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
@@ -161,5 +167,13 @@ public class User {
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	public Set<Payment> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set<Payment> payments) {
+		this.payments = payments;
 	}
 }
