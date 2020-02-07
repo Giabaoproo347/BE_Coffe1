@@ -3,6 +3,7 @@ package com.codegym.controllers;
 
 import com.codegym.models.Order;
 import com.codegym.models.Payment;
+import com.codegym.models.Status;
 import com.codegym.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,6 +81,38 @@ public class PaymentController {
         return new ResponseEntity<Payment>(HttpStatus.NOT_FOUND);
 
     }
+
+//    @PutMapping("/change-status/{id}")
+//    public ResponseEntity<?> changeOrderStatus(@RequestBody String status, @PathVariable Long id) {
+//        String currentStatus;
+//        switch (status) {
+//            case "order":
+//                currentStatus = Status.order;
+//                break;
+//            case "processing":
+//                currentStatus = Status.processing;
+//                break;
+//            case "cancel":
+//                currentStatus = Status.cancel;
+//                break;
+//            case "done":
+//                currentStatus = Status.done;
+//                break;
+//            case "normal":
+//                currentStatus = Status.normal;
+//                break;
+//            default:
+//                throw new IllegalStateException("Unexpected value: " + status);
+//        }
+//        Optional<Payment> currentPayment = paymentService.findById(id);
+//        if (currentPayment.isPresent()) {
+//            currentPayment.get().setStatus(currentStatus);
+//            paymentService.save(currentPayment.get());
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
