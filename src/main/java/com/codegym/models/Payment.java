@@ -1,5 +1,7 @@
 package com.codegym.models;
 
+import com.codegym.models.user.User;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,9 +20,13 @@ public class Payment {
     private String method;
     private String description;
     private String status;
+//    private Long user_id;
 
     @OneToMany(targetEntity = Order.class)
     private Set<Order> orders;
+
+    @ManyToOne
+    private User user;
 
 
     public Payment() {
@@ -30,7 +36,7 @@ public class Payment {
         this.method = method;
     }
 
-    public Payment(Long id, String name, String address, String phone, String email, Double total, String date, String description, String status, String method, Long code, Set<Order> orders) {
+    public Payment(Long id, String name, String address, String phone, String email, Double total, String date, String description, String status, String method, Long code, Set<Order> orders, Long user_id) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -137,4 +143,20 @@ public class Payment {
     public void setCode(Long code) {
         this.code = code;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+//    public Long getUser_id() {
+//        return user_id;
+//    }
+//
+//    public void setUser_id(Long user_id) {
+//        this.user_id = user_id;
+//    }
 }

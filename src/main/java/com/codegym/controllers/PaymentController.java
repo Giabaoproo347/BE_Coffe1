@@ -28,6 +28,16 @@ public class PaymentController {
         return new ResponseEntity<Iterable<Payment>>(payments, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> findAllByUser_Id(@PathVariable Long id) {
+        List<Payment> paymentList = paymentService.findAllByUserId(id);
+        if (paymentList != null) {
+            return new ResponseEntity<List<Payment>>(paymentList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("list-by-status")
     public ResponseEntity<List<Payment>> listPaymentByStatus(String status) {
         List<Payment> paymentList = (List<Payment>) paymentService.findAllByStatus(status);
@@ -58,7 +68,7 @@ public class PaymentController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
         Optional<Payment> currentPayment = paymentService.findById(id);
         if (currentPayment.isPresent()) {
@@ -115,7 +125,7 @@ public class PaymentController {
 //    }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Payment> deletePayment(@PathVariable Long id) {
         Optional<Payment> payment = paymentService.findById(id);
         if (payment.isPresent()) {
