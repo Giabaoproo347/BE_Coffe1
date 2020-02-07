@@ -61,20 +61,57 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		
+
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(new JwtResponse(jwt,
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(),
-												 userDetails.getPhone(),
-												 userDetails.getAddress(),
-												 roles));
+				userDetails.getId(),
+				userDetails.getUsername(),
+				userDetails.getEmail(),
+				roles,
+				userDetails.getAddress(),
+				userDetails.getPhone()
+		));
 	}
+
+	@PostMapping("/check-password")
+	public ResponseEntity<?> checkPassword(@Valid @RequestBody LoginRequest loginRequest) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		if (authentication == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+	}
+
+	@PostMapping("/change-password")
+	public ResponseEntity<?> changePassword(@Valid @RequestBody LoginRequest loginRequest) {
+		Optional<User> currentUser = userRepository.findByUsername(loginRequest.getUsername());
+		if (currentUser.isPresent()) {
+			currentUser.get().setPassword(encoder.encode(loginRequest.getPassword()));
+			userRepository.save(currentUser.get());
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	@PostMapping("/change-profile")
+	public ResponseEntity<?> changeProfile(@Valid @RequestBody SignupRequest signupRequest) {
+		Optional<User> currentUser = userRepository.findByUsername(signupRequest.getUsername());
+		if (currentUser.isPresent()) {
+			currentUser.get().setEmail(signupRequest.getEmail());
+			currentUser.get().setPhone(signupRequest.getPhone());
+			currentUser.get().setAddress(signupRequest.getAddress());
+			userRepository.save(currentUser.get());
+			return new ResponseEntity<Optional<User>>(currentUser, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
@@ -92,10 +129,10 @@ public class AuthController {
 
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(),
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()),
-							 signUpRequest.getAddress(),
-							 signUpRequest.getPhone());
+				signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()),
+				signUpRequest.getAddress(),
+				signUpRequest.getPhone());
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -107,22 +144,22 @@ public class AuthController {
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
-				case "admin":
-					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
+					case "admin":
+						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(adminRole);
 
-					break;
-				case "mod":
-					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(modRole);
+						break;
+					case "mod":
+						Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(modRole);
 
-					break;
-				default:
-					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
+						break;
+					default:
+						Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(userRole);
 				}
 			});
 		}
@@ -131,66 +168,5 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-	}
-
-	@GetMapping("")
-	public ResponseEntity<List<User>> listAllUser() {
-		List<User> users = (List<User>) userRepository.findAll();
-		if (users.isEmpty()) {
-			return new ResponseEntity<List<User>>(users, HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<Optional<User>> getUser(@PathVariable("id") long id){
-		Optional<User> user = userRepository.findById(id);
-		if(!user.isPresent()){
-			return new ResponseEntity<Optional<User>>(user, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
-	}
-
-	@PostMapping("")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder uriComponentsBuilder) {
-		userRepository.save(user);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(uriComponentsBuilder.path("/{id}").buildAndExpand(user.getId()).toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
-
-	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Optional<User>> updateUser(@PathVariable("id") long id, @RequestBody User user) {
-
-		Optional<User> currentUser = userRepository.findById(id);
-
-		if (!currentUser.isPresent()) {
-			return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
-		}
-
-		currentUser.get().setAddress(user.getAddress());
-		currentUser.get().setEmail(user.getEmail());
-		currentUser.get().setId(user.getId());
-		currentUser.get().setMethod(user.getMethod());
-		currentUser.get().setName(user.getName());
-		currentUser.get().setPassword(user.getPassword());
-		currentUser.get().setPhone(user.getPhone());
-		currentUser.get().setTotal(user.getTotal());
-		currentUser.get().setRoles(user.getRoles());
-		currentUser.get().setUsername(user.getUsername());
-		return new ResponseEntity<Optional<User>>(currentUser, HttpStatus.OK);
-	}
-
-	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
-		Optional<User> user = userRepository.findById(id);
-		if (!user.isPresent()) {
-			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-		}
-		userRepository.deleteById(id);
-		return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 	}
 }
