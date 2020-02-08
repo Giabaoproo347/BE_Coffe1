@@ -1,6 +1,7 @@
 package com.codegym.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -14,6 +15,7 @@ public class Product {
     private String image;
     private String image2;
     private String image3;
+    private int like;
 
 
     @ManyToOne
@@ -27,7 +29,7 @@ public class Product {
 
     public Product() {
     }
-    public Product( String name, long price, String description, String image,String image2, String image3 , Promotion promotion, Category category) {
+    public Product( String name, long price, String description, String image,String image2, String image3 , Promotion promotion, Category category, int like) {
         this.name = name;
         this.price = price;
         this.description = description;
@@ -36,6 +38,7 @@ public class Product {
         this.category = category;
         this.image2 = image2;
         this.image3 = image3;
+        this.like = like;
     }
 
     public Long getId() {
@@ -76,6 +79,14 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
     }
 
     public Promotion getPromotion() {
