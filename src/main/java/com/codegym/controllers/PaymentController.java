@@ -92,37 +92,6 @@ public class PaymentController {
 
     }
 
-//    @PutMapping("/change-status/{id}")
-//    public ResponseEntity<?> changeOrderStatus(@RequestBody String status, @PathVariable Long id) {
-//        String currentStatus;
-//        switch (status) {
-//            case "order":
-//                currentStatus = Status.order;
-//                break;
-//            case "processing":
-//                currentStatus = Status.processing;
-//                break;
-//            case "cancel":
-//                currentStatus = Status.cancel;
-//                break;
-//            case "done":
-//                currentStatus = Status.done;
-//                break;
-//            case "normal":
-//                currentStatus = Status.normal;
-//                break;
-//            default:
-//                throw new IllegalStateException("Unexpected value: " + status);
-//        }
-//        Optional<Payment> currentPayment = paymentService.findById(id);
-//        if (currentPayment.isPresent()) {
-//            currentPayment.get().setStatus(currentStatus);
-//            paymentService.save(currentPayment.get());
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @DeleteMapping("/{id}")
 //    @PreAuthorize("hasRole('ADMIN')")

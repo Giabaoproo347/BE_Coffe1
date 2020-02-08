@@ -9,6 +9,10 @@ import com.codegym.services.CategoryService;
 import com.codegym.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +44,15 @@ public class ProductController {
             return new ResponseEntity<List<Product>>(products, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/top-hot")
+    public ResponseEntity<Page<Product>> orderByLike(@PageableDefault(sort = {"like"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Product> products = (Page<Product>) productService.findAll(pageable);
+        if (products.isEmpty()) {
+            return new ResponseEntity<Page<Product>>(products, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Page<Product>>(products, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -75,13 +88,14 @@ public class ProductController {
 
 
 
+
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Optional<Product>> createProduct(@RequestBody Product product) {
         System.out.println("Creating Product " + product.getName());
         Category category = product.getCategory();
         Promotion promotion = product.getPromotion();
-        Product currentProduct = new Product(product.getName(), product.getPrice(), product.getDescription(), product.getImage(), product.getImage2(), product.getImage3(), promotion, category);
+        Product currentProduct = new Product(product.getName(), product.getPrice(), product.getDescription(), product.getImage(), product.getImage2(), product.getImage3(), promotion, category, product.getLike());
         productService.save(currentProduct);
         return new ResponseEntity<Optional<Product>>(HttpStatus.CREATED);
     }
