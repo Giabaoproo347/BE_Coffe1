@@ -154,4 +154,17 @@ public class ProductController {
             return new ResponseEntity<>(products,HttpStatus.OK);
         }
     }
+
+//    @PutMapping("/like/{id}")
+//    public ResponseEntity<Optional<Product>> addLike(@PathVariable("id") long id, @RequestBody Product product) {
+//        Optional<Product> currentProduct = productService.findById(id);
+//
+//        if (!currentProduct.isPresent()) {
+//            return new ResponseEntity<Optional<Product>>(HttpStatus.NOT_FOUND);
+//        }
+//        currentProduct.get().setLike(product.getLike() + 1);
+//        productService.save(currentProduct.get());
+//        return new ResponseEntity<Optional<Product>>(currentProduct, HttpStatus.OK);
+//    }
+
 }
